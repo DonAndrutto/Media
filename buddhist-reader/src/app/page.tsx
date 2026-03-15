@@ -5,7 +5,7 @@ import { ReaderProvider, useReader } from "@/context/ReaderContext";
 import { ControlBar } from "@/components/ControlBar";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { TextContent } from "@/components/TextContent";
-import { sampleText } from "@/data/sample-text";
+import { practiceText } from "@/data/sample-text";
 import { Minimize } from "lucide-react";
 
 function ReaderApp() {
@@ -27,7 +27,7 @@ function ReaderApp() {
         ref={scrollContainerRef}
         className="flex-1 overflow-y-auto reader-scroll"
       >
-        <TextContent textData={sampleText} />
+        <TextContent textData={practiceText} />
       </div>
 
       {/* Control bar (bottom) */}

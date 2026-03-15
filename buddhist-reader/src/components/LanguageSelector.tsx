@@ -7,9 +7,8 @@ import { Language } from "@/types";
 
 const languages: { key: Language; label: string; short: string }[] = [
   { key: "tibetan", label: "བོད་ཡིག", short: "TIB" },
-  { key: "transliteration", label: "Wylie", short: "WYL" },
-  { key: "english", label: "English", short: "ENG" },
-  { key: "sanskrit", label: "संस्कृत", short: "SKT" },
+  { key: "transliteration", label: "Fonetyka", short: "FON" },
+  { key: "polish", label: "Polski", short: "PL" },
 ];
 
 export function LanguageSelector() {

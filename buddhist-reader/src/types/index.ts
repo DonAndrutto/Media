@@ -1,23 +1,29 @@
-export type Language = "tibetan" | "transliteration" | "english" | "sanskrit";
+export type Language = "tibetan" | "transliteration" | "polish";
 
 export type Theme = "light" | "dark" | "sepia";
 
+export type ContentItem =
+  | { type: "verse"; tibetan: string; transliteration: string; polish: string }
+  | { type: "verse-no-polish"; tibetan: string; transliteration: string }
+  | { type: "mantra"; tibetan: string; transliteration: string }
+  | { type: "instruction"; text: string }
+  | { type: "footnote"; text: string };
+
 export interface TextSection {
   number: number;
-  title: Record<Language, string>;
-  content: Record<Language, string[]>;
-}
-
-export interface GlossaryEntry {
-  term: string;
-  english: string;
-  sanskrit: string;
-  tibetan: string;
+  tibetanTitle: string;
+  title: string;
+  content: ContentItem[];
 }
 
 export interface TextData {
   id: string;
-  title: Record<Language, string>;
+  tibetanTitle: string;
+  transliterationTitle: string;
+  polishTitle: string;
+  subtitle: string;
+  author: string;
+  organization: string;
   sections: TextSection[];
-  glossary: GlossaryEntry[];
+  colophon: string[];
 }

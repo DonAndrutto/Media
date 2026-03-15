@@ -111,6 +111,26 @@ button[data-variant="ghost"]:hover,
   background: var(--glossary-bg);
 }
 
+/* Instruction block */
+.instruction-block {
+  background: var(--glossary-bg);
+  border-left: 3px solid var(--border);
+}
+
+/* Mantra block */
+.mantra-block {
+  background: var(--accent);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+/* Section divider */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  opacity: 0.5;
+}
+
 /* Text content paragraph */
 .text-content-paragraph {
   text-align: justify;

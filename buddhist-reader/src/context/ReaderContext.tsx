@@ -53,7 +53,7 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
   const [scrollSpeed, setScrollSpeed] = useState(1.1);
   const [isTiltEnabled, setIsTiltEnabled] = useState(false);
   const [textSize, setTextSize] = useState(1.25);
-  const [language, setLanguage] = useState<Language>("english");
+  const [language, setLanguage] = useState<Language>("polish");
   const [theme, setTheme] = useState<Theme>("light");
   const [isUIVisible, setIsUIVisible] = useState(true);
   const [elapsedTime, setElapsedTime] = useState(0);
