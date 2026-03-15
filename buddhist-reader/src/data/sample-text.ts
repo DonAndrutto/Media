@@ -92,6 +92,7 @@ export const practiceText: TextData = {
         },
         {
           type: "instruction",
+          tibetan: "ཅེས་ཀུན་རྫོབ་བྱང་སེམས་ལ་བློ་སྦྱངས་ནས་དོན་དམ་སེམས་བསྐྱེད་ངང་ལ་མཉམ་པར་བཞག་གོ",
           text: "Wyćwiczywszy umysł we względnej bodhiczitcie [tj. w jej relatywnym aspekcie, w którym występuje obiekt owego współczucia], spocznij w medytacyjnym wyciszeniu, w bodhiczitcie absolutnej.",
         },
       ],
@@ -324,6 +325,7 @@ export const practiceText: TextData = {
         },
         {
           type: "instruction",
+          tibetan: "ཅེས་ཅི་ནུས་སུ་བཟླ། སྐབས་སུ་སྙན་པའི་དབྱངས་ཀྱི་རྟ་ལ་དྲངས་ནས་བཟླས་ནའང་བོགས་ཆེ་ཞིང་གེགས་བསལ་བ་ལ་གལ་ཆེ་བ་ཡིན་ནོ།།",
           text: "Recytuj, ile zdołasz. Czasem śpiewaj melodyjnie. Śpiewanie jest wielkim wzmocnieniem i metodą przezwyciężania przeszkód. To ważne.",
         },
       ],
@@ -363,6 +365,7 @@ export const practiceText: TextData = {
         },
         {
           type: "instruction",
+          tibetan: "ཅེས་གནས་ལུགས་དོན་གྱི་དགོངས་པ་བསྐྱང་ངོ༌།། །།སླར་ཡང་",
           text: "Utrzymuj rozpoznanie znaczenia fundamentalnej natury umysłu. Po czym:",
         },
         {
@@ -372,6 +375,7 @@ export const practiceText: TextData = {
         },
         {
           type: "instruction",
+          tibetan: "ཅེས་པའི་སྒྲས་སད་པའི་རྐྱེན་གྱིས་མཉམ་བཞག་གི་ངང་ལས་རྗེས་ཐོབ་སྒྱུ་མ་ལྟ་བུའི་ལྷ་སྐུར་ལྡང་བ་ནི།",
           text: "Gdy już skończyło się wymawianie tej mantry, jej dźwięk sprawił, że wyszliśmy z formalnej medytacji i weszliśmy w podobną iluzji fazę po-medytacyjną: oto znów widzimy siebie jako bóstwo.",
         },
         {
@@ -403,6 +407,7 @@ export const practiceText: TextData = {
         },
         {
           type: "instruction",
+          tibetan: "དེ་རྗེས་བསྔོ་བ་སྨོན་ལམ་སོགས་ཅི་རིགས་པས་མཐའ་རྒྱན་པར་བྱའོ།།",
           text: "Następnie przypieczętuj swą praktykę modlitwą dedykowania zasługi oraz aspiracji, wedle uznania.",
         },
         {

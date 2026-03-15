@@ -36,6 +36,8 @@ export function ControlBar() {
     setScrollSpeed,
     isTiltEnabled,
     setIsTiltEnabled,
+    tiltPermissionGranted,
+    requestTiltPermission,
     textSize,
     setTextSize,
     theme,
@@ -66,27 +68,14 @@ export function ControlBar() {
 
   const toggleTilt = useCallback(async () => {
     if (!isTiltEnabled) {
-      // Request permission on iOS
-      if (
-        typeof (DeviceOrientationEvent as unknown as { requestPermission?: () => Promise<string> })
-          .requestPermission === "function"
-      ) {
-        try {
-          const permission = await (
-            DeviceOrientationEvent as unknown as {
-              requestPermission: () => Promise<string>;
-            }
-          ).requestPermission();
-          if (permission !== "granted") return;
-        } catch {
-          return;
-        }
+      if (!tiltPermissionGranted) {
+        await requestTiltPermission();
       }
       setIsTiltEnabled(true);
     } else {
       setIsTiltEnabled(false);
     }
-  }, [isTiltEnabled, setIsTiltEnabled]);
+  }, [isTiltEnabled, tiltPermissionGranted, requestTiltPermission, setIsTiltEnabled]);
 
   const cycleTheme = useCallback(() => {
     const themes: Theme[] = ["light", "dark", "sepia"];

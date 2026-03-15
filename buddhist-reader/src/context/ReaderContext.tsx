@@ -19,6 +19,8 @@ interface ReaderContextType {
   // Tilt state
   isTiltEnabled: boolean;
   setIsTiltEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  tiltPermissionGranted: boolean;
+  requestTiltPermission: () => Promise<void>;
   // Text size
   textSize: number;
   setTextSize: React.Dispatch<React.SetStateAction<number>>;
@@ -52,6 +54,7 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
   const [isScrolling, setIsScrolling] = useState(false);
   const [scrollSpeed, setScrollSpeed] = useState(1.1);
   const [isTiltEnabled, setIsTiltEnabled] = useState(false);
+  const [tiltPermissionGranted, setTiltPermissionGranted] = useState(false);
   const [textSize, setTextSize] = useState(1.25);
   const [selectedLanguages, setSelectedLanguages] = useState<Language[]>([
     "tibetan",
@@ -71,6 +74,29 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
   const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastFrameTimeRef = useRef<number>(0);
   const accumulatedScrollRef = useRef<number>(0);
+
+  const requestTiltPermission = useCallback(async () => {
+    if (
+      typeof (DeviceOrientationEvent as unknown as { requestPermission?: () => Promise<string> })
+        .requestPermission === "function"
+    ) {
+      try {
+        const permission = await (
+          DeviceOrientationEvent as unknown as {
+            requestPermission: () => Promise<string>;
+          }
+        ).requestPermission();
+        if (permission === "granted") {
+          setTiltPermissionGranted(true);
+        }
+      } catch {
+        // Permission denied or error
+      }
+    } else {
+      // Non-iOS browsers don't need permission
+      setTiltPermissionGranted(true);
+    }
+  }, []);
 
   const toggleLanguage = useCallback((lang: Language) => {
     setSelectedLanguages((prev) => {
@@ -124,56 +150,57 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
     };
   }, [isScrolling, scrollSpeed, isTiltEnabled]);
 
-  // Tilt-to-scroll with sub-pixel accumulation
+  // Tilt-to-scroll using proven working code pattern
   useEffect(() => {
-    if (!isTiltEnabled) return;
+    let animationFrameId: number | null = null;
+    let referenceBeta: number | null = null;
 
     const container = scrollContainerRef.current;
-    if (!container) return;
-
-    let lastTime = performance.now();
-    let rafId: number | null = null;
-    let currentTilt = 0;
-    let tiltAccumulated = 0;
 
     const handleOrientation = (event: DeviceOrientationEvent) => {
-      const beta = event.beta ?? 0;
-      // Normalize: 0 at ~45 degrees (natural phone holding angle)
-      currentTilt = beta - 45;
-    };
+      if (event.beta === null || !container) return;
 
-    const tiltScroll = (now: number) => {
-      const delta = now - lastTime;
-      if (delta >= 16) {
-        const absTilt = Math.abs(currentTilt);
-        if (absTilt > 1) {
-          // Dead zone > 1 degree
-          const direction = currentTilt > 0 ? 1 : -1;
-          const speed = Math.pow(absTilt / 10, 2);
-          tiltAccumulated += direction * speed;
-          const pixels = Math.trunc(tiltAccumulated);
-          if (Math.abs(pixels) >= 1) {
-            container.scrollBy({ top: pixels, behavior: "auto" });
-            tiltAccumulated -= pixels;
-          }
-        } else {
-          tiltAccumulated = 0;
-        }
-        lastTime = now;
+      if (referenceBeta === null) {
+        referenceBeta = event.beta; // baseline reference angle
       }
-      rafId = requestAnimationFrame(tiltScroll);
+
+      const tilt = event.beta - referenceBeta; // delta from baseline
+      const scrollAmount =
+        Math.pow(Math.abs(tilt) / 10, 2) * -Math.sign(tilt) * scrollSpeed;
+
+      // actual scrolling on requestAnimationFrame
+      const scroll = () => {
+        if (isTiltEnabled && tiltPermissionGranted && Math.abs(tilt) > 1) {
+          container.scrollBy({ top: scrollAmount, behavior: "auto" });
+          animationFrameId = requestAnimationFrame(scroll);
+        } else {
+          if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+          }
+        }
+      };
+
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+      scroll();
     };
 
-    window.addEventListener("deviceorientation", handleOrientation, {
-      passive: true,
-    });
-    rafId = requestAnimationFrame(tiltScroll);
+    if (isTiltEnabled && tiltPermissionGranted) {
+      window.addEventListener("deviceorientation", handleOrientation);
+    } else {
+      window.removeEventListener("deviceorientation", handleOrientation);
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      referenceBeta = null;
+    }
 
     return () => {
       window.removeEventListener("deviceorientation", handleOrientation);
-      if (rafId) cancelAnimationFrame(rafId);
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
-  }, [isTiltEnabled]);
+  }, [isTiltEnabled, tiltPermissionGranted, scrollSpeed]);
 
   // Manual scroll detection - pauses auto-scroll for 2 seconds
   useEffect(() => {
@@ -286,6 +313,8 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
     setScrollSpeed,
     isTiltEnabled,
     setIsTiltEnabled,
+    tiltPermissionGranted,
+    requestTiltPermission,
     textSize,
     setTextSize,
     selectedLanguages,
