@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Tibetan:wght@400;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&family=Source+Serif+4:wght@400;600&display=swap');
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --font-sans: 'Inter', sans-serif;
+  --font-headline: 'Playfair Display', serif;
+  --font-body: 'Source Serif 4', serif;
+  --font-tibetan: 'Noto Serif Tibetan', serif;
+}
+
+/* Light theme (default) */
+:root,
+[data-theme="light"] {
+  --background: #faf8f5;
+  --foreground: #1a1a1a;
+  --primary: #8b5e3c;
+  --primary-foreground: #ffffff;
+  --accent: rgba(139, 94, 60, 0.1);
+  --accent-foreground: #8b5e3c;
+  --border: rgba(139, 94, 60, 0.2);
+  --control-bg: rgba(250, 248, 245, 0.8);
+  --timer-bg: rgba(139, 94, 60, 0.1);
+  --timer-color: #8b5e3c;
+  --glossary-bg: rgba(139, 94, 60, 0.05);
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --background: #1a1a2e;
+  --foreground: #e0d8cc;
+  --primary: #d4a574;
+  --primary-foreground: #1a1a2e;
+  --accent: rgba(212, 165, 116, 0.15);
+  --accent-foreground: #d4a574;
+  --border: rgba(212, 165, 116, 0.2);
+  --control-bg: rgba(26, 26, 46, 0.85);
+  --timer-bg: rgba(212, 165, 116, 0.15);
+  --timer-color: #d4a574;
+  --glossary-bg: rgba(212, 165, 116, 0.05);
+}
+
+/* Sepia theme */
+[data-theme="sepia"] {
+  --background: #f4e8d1;
+  --foreground: #3e2c1c;
+  --primary: #7c4a1e;
+  --primary-foreground: #f4e8d1;
+  --accent: rgba(124, 74, 30, 0.12);
+  --accent-foreground: #7c4a1e;
+  --border: rgba(124, 74, 30, 0.25);
+  --control-bg: rgba(244, 232, 209, 0.85);
+  --timer-bg: rgba(124, 74, 30, 0.12);
+  --timer-color: #7c4a1e;
+  --glossary-bg: rgba(124, 74, 30, 0.06);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  transition: background-color 300ms, color 300ms;
+}
+
+.font-headline {
+  font-family: var(--font-headline);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-tibetan {
+  font-family: var(--font-tibetan);
+  line-height: 2;
+}
+
+/* Control bar styles */
+.control-bar {
+  background: var(--control-bg);
+  border-color: var(--border);
+}
+
+/* Timer display */
+.timer-display {
+  background: var(--timer-bg);
+  color: var(--timer-color);
+}
+
+/* Active button state */
+.active-button {
+  background: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
+/* Ghost button hover */
+button[data-variant="ghost"]:hover,
+.hover\:bg-accent:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Glossary entry */
+.glossary-entry {
+  background: var(--glossary-bg);
+}
+
+/* Text content paragraph */
+.text-content-paragraph {
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* Fullscreen restore button */
+.restore-button {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 100;
+  background: var(--control-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 0.5rem;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 300ms;
+}
+
+.restore-button:hover {
+  opacity: 1;
+}
+
+/* Scrollbar styling */
+.reader-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.reader-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.reader-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: background-color, border-color, color;
+  transition-duration: 300ms;
+  transition-timing-function: ease;
+}
+
+/* Override transitions for scroll performance */
+.reader-scroll,
+.reader-scroll * {
+  transition-property: none;
+}
+
+.reader-scroll p,
+.reader-scroll h1,
+.reader-scroll h2,
+.reader-scroll span,
+.reader-scroll div {
+  transition-property: font-size;
+  transition-duration: 300ms;
+}
