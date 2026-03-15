@@ -11,22 +11,11 @@ import {
   ZoomIn,
   ZoomOut,
   Maximize,
-  Minimize,
-  Timer as TimerIcon,
-  Move3d,
   Sun,
   Moon,
   BookOpen,
 } from "lucide-react";
 import { Theme } from "@/types";
-
-function formatTime(seconds: number): string {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
-  if (h > 0) return `${h}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-  return `${m}:${s.toString().padStart(2, "0")}`;
-}
 
 export function ControlBar() {
   const {
@@ -34,20 +23,12 @@ export function ControlBar() {
     setIsScrolling,
     scrollSpeed,
     setScrollSpeed,
-    isTiltEnabled,
-    setIsTiltEnabled,
-    tiltPermissionGranted,
-    requestTiltPermission,
     textSize,
     setTextSize,
     theme,
     setTheme,
     isUIVisible,
     setIsUIVisible,
-    elapsedTime,
-    remainingTime,
-    showRemaining,
-    setShowRemaining,
   } = useReader();
 
   const decreaseSpeed = useCallback(() => {
@@ -66,24 +47,20 @@ export function ControlBar() {
     setTextSize((prev) => Math.min(2.5, Math.round((prev + 0.1) * 10) / 10));
   }, [setTextSize]);
 
-  const toggleTilt = useCallback(async () => {
-    if (!isTiltEnabled) {
-      if (!tiltPermissionGranted) {
-        await requestTiltPermission();
-      }
-      setIsTiltEnabled(true);
-    } else {
-      setIsTiltEnabled(false);
-    }
-  }, [isTiltEnabled, tiltPermissionGranted, requestTiltPermission, setIsTiltEnabled]);
-
   const cycleTheme = useCallback(() => {
     const themes: Theme[] = ["light", "dark", "sepia"];
     const currentIndex = themes.indexOf(theme);
     setTheme(themes[(currentIndex + 1) % themes.length]);
   }, [theme, setTheme]);
 
-  const themeIcon = theme === "dark" ? <Moon className="h-4 w-4" /> : theme === "sepia" ? <BookOpen className="h-4 w-4" /> : <Sun className="h-4 w-4" />;
+  const themeIcon =
+    theme === "dark" ? (
+      <Moon className="h-4 w-4" />
+    ) : theme === "sepia" ? (
+      <BookOpen className="h-4 w-4" />
+    ) : (
+      <Sun className="h-4 w-4" />
+    );
 
   return (
     <div
@@ -91,19 +68,6 @@ export function ControlBar() {
         isUIVisible ? "translate-y-0" : "translate-y-full"
       }`}
     >
-      {/* Timer display above center */}
-      <div className="flex justify-center mb-1">
-        <button
-          onClick={() => setShowRemaining((prev) => !prev)}
-          className="timer-display px-3 py-1 rounded-full text-sm font-mono backdrop-blur-md cursor-pointer"
-        >
-          <TimerIcon className="h-3 w-3 inline mr-1" />
-          {showRemaining
-            ? `-${formatTime(remainingTime)}`
-            : formatTime(elapsedTime)}
-        </button>
-      </div>
-
       {/* Main control bar */}
       <div className="control-bar backdrop-blur-lg border-t px-2 py-2">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-1">
@@ -148,7 +112,7 @@ export function ControlBar() {
             </span>
           </div>
 
-          {/* Center: Fullscreen + Tilt + Theme */}
+          {/* Center: Fullscreen + Theme */}
           <div className="flex items-center gap-1">
             <Button
               variant="ghost"
@@ -157,16 +121,6 @@ export function ControlBar() {
               aria-label="Toggle fullscreen"
             >
               <Maximize className="h-4 w-4" />
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTilt}
-              className={isTiltEnabled ? "active-button" : ""}
-              aria-label="Toggle tilt scroll"
-            >
-              <Move3d className="h-4 w-4" />
             </Button>
 
             <Button
