@@ -12,7 +12,7 @@ const languages: { key: Language; label: string; short: string }[] = [
 ];
 
 export function LanguageSelector() {
-  const { language, setLanguage } = useReader();
+  const { selectedLanguages, toggleLanguage } = useReader();
 
   return (
     <div className="flex items-center justify-center gap-2 py-2">
@@ -21,9 +21,9 @@ export function LanguageSelector() {
           key={lang.key}
           variant="ghost"
           size="default"
-          onClick={() => setLanguage(lang.key)}
+          onClick={() => toggleLanguage(lang.key)}
           className={`text-xs px-3 py-1 h-7 ${
-            language === lang.key ? "active-button" : ""
+            selectedLanguages.includes(lang.key) ? "active-button" : ""
           }`}
         >
           <span className="hidden sm:inline">{lang.label}</span>

@@ -6,7 +6,7 @@ export type ContentItem =
   | { type: "verse"; tibetan: string; transliteration: string; polish: string }
   | { type: "verse-no-polish"; tibetan: string; transliteration: string }
   | { type: "mantra"; tibetan: string; transliteration: string }
-  | { type: "instruction"; text: string }
+  | { type: "instruction"; tibetan?: string; text: string }
   | { type: "footnote"; text: string };
 
 export interface TextSection {

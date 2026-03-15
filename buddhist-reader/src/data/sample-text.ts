@@ -240,22 +240,27 @@ export const practiceText: TextData = {
         },
         {
           type: "instruction",
+          tibetan: "ཅེས་ལྷ་བདག་དག་མཉམ་བདེན་གཉིས་དབྱེར་མེད་ཀྱི་ལྟ་བའི་རང་ངོ་སྐྱོང་ཞིང་དེ་ཉིད་ཀྱི་རང་གདངས་འགག་མེད་དུ་ཤར་བ་རྒྱལ་བ་ཐམས་ཅད་ཀྱི་སྙིང་རྗེའི་རང་གཟུགས་སྐུ་གསུང་ཐུགས་ཡེ་ཤེས་ལྔའི་བདག་ཉིད་ཅན།",
           text: "Ja i bóstwo jesteśmy w stanie równości – czystości. Dwie prawdy [relatywna i absolutna] są nierozdzielne. Gdy ćwiczę się w esencji poglądu, jego promienność manifestuje się jako niepowstrzymane współczucie Zwycięskiego, w formie jaką opisaliśmy, jako ucieleśnienie przebudzonego Ciała, Mowy i Umysłu, oraz pięciu pierwotnych mądrości.",
         },
         {
           type: "instruction",
+          tibetan: "འཕགས་པ་ཐུགས་རྗེ་ཆེན་པོ་མུན་སེལ་སྒྲོན་མེ་ངའོ་སྙམ་པ་དང༌།",
           text: `Utrzymuj wadżra dumę, odczuwając: „Nie jestem różny od wzniosłego Wielkiego Współczującego, Pochodni Rozpraszającej Mrok (Mynsel Dronme)".`,
         },
         {
           type: "instruction",
+          tibetan: "རྟེན་དང་བརྟེན་པ་ཐམས་ཅད་ཀྱང་ཆོས་ཉིད་ཀྱི་རང་རྩལ་དུ་ངེས་ཤེས་བསྐྱེད།",
           text: "Osiągnij pewność dotyczącą pałacu bóstwa, który podtrzymuje – i jego zawartości – bóstw, które są podtrzymane – że są one niczym innym jak dynamicznym przejawieniem dharmaty.",
         },
         {
           type: "instruction",
+          tibetan: "རང་རིག་ལས་ལོགས་སུ་གྱུར་པའི་ལྷ་མེད། ལྷ་ཉིད་སྤངས་པའི་ཕ་རོལ་ན་སེམས་ཉིད་མ་གྲུབ་པས།",
           text: "Poza wrodzoną świadomością nie ma innego bóstwa. Esencja umysłu nigdy się nie narodziła, to ona jest bóstwem. Nie da się tego znaleźć gdzie indziej.",
         },
         {
           type: "instruction",
+          tibetan: "རང་སེམས་ལྷ་སྐུ་དང་དབྱེར་མེད་གསལ་སྟོང་འཛིན་མེད་དུ་ཤེས་པའི་མོས་པས་གསུང་བཟླས་པ་སྔགས་ཀྱི་རྣལ་འབྱོར་ལ་འཇུག་པ་ནི།",
           text: "Wiedz, że twój umysł i bóstwo są nierozdzielne, to nierozdzielność pustki i świetlistości. Pozostań bez rozproszeń i zaangażuj się w jogę mowy, powtarzanie mantry.",
         },
       ],

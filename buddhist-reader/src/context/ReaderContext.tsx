@@ -22,9 +22,9 @@ interface ReaderContextType {
   // Text size
   textSize: number;
   setTextSize: React.Dispatch<React.SetStateAction<number>>;
-  // Language
-  language: Language;
-  setLanguage: React.Dispatch<React.SetStateAction<Language>>;
+  // Languages (multi-select)
+  selectedLanguages: Language[];
+  toggleLanguage: (lang: Language) => void;
   // Theme
   theme: Theme;
   setTheme: React.Dispatch<React.SetStateAction<Theme>>;
@@ -53,7 +53,11 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
   const [scrollSpeed, setScrollSpeed] = useState(1.1);
   const [isTiltEnabled, setIsTiltEnabled] = useState(false);
   const [textSize, setTextSize] = useState(1.25);
-  const [language, setLanguage] = useState<Language>("polish");
+  const [selectedLanguages, setSelectedLanguages] = useState<Language[]>([
+    "tibetan",
+    "transliteration",
+    "polish",
+  ]);
   const [theme, setTheme] = useState<Theme>("light");
   const [isUIVisible, setIsUIVisible] = useState(true);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -66,14 +70,27 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
   const animationFrameRef = useRef<number | null>(null);
   const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastFrameTimeRef = useRef<number>(0);
+  const accumulatedScrollRef = useRef<number>(0);
 
-  // Auto-scroll with requestAnimationFrame
+  const toggleLanguage = useCallback((lang: Language) => {
+    setSelectedLanguages((prev) => {
+      if (prev.includes(lang)) {
+        // Don't allow deselecting all
+        if (prev.length <= 1) return prev;
+        return prev.filter((l) => l !== lang);
+      }
+      return [...prev, lang];
+    });
+  }, []);
+
+  // Auto-scroll with requestAnimationFrame + sub-pixel accumulation
   useEffect(() => {
     if (!isScrolling || isTiltEnabled) {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = null;
       }
+      accumulatedScrollRef.current = 0;
       return;
     }
 
@@ -81,13 +98,18 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
     if (!container) return;
 
     lastFrameTimeRef.current = performance.now();
+    accumulatedScrollRef.current = 0;
 
     const scroll = (now: number) => {
       const delta = now - lastFrameTimeRef.current;
       // Target 16ms intervals (60fps)
       if (delta >= 16) {
-        const scrollAmount = scrollSpeed * 0.3;
-        container.scrollBy({ top: scrollAmount, behavior: "auto" });
+        accumulatedScrollRef.current += scrollSpeed * 0.3;
+        const pixels = Math.floor(accumulatedScrollRef.current);
+        if (pixels >= 1) {
+          container.scrollBy({ top: pixels, behavior: "auto" });
+          accumulatedScrollRef.current -= pixels;
+        }
         lastFrameTimeRef.current = now;
       }
       animationFrameRef.current = requestAnimationFrame(scroll);
@@ -102,7 +124,7 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
     };
   }, [isScrolling, scrollSpeed, isTiltEnabled]);
 
-  // Tilt-to-scroll
+  // Tilt-to-scroll with sub-pixel accumulation
   useEffect(() => {
     if (!isTiltEnabled) return;
 
@@ -112,6 +134,7 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
     let lastTime = performance.now();
     let rafId: number | null = null;
     let currentTilt = 0;
+    let tiltAccumulated = 0;
 
     const handleOrientation = (event: DeviceOrientationEvent) => {
       const beta = event.beta ?? 0;
@@ -127,7 +150,14 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
           // Dead zone > 1 degree
           const direction = currentTilt > 0 ? 1 : -1;
           const speed = Math.pow(absTilt / 10, 2);
-          container.scrollBy({ top: direction * speed, behavior: "auto" });
+          tiltAccumulated += direction * speed;
+          const pixels = Math.trunc(tiltAccumulated);
+          if (Math.abs(pixels) >= 1) {
+            container.scrollBy({ top: pixels, behavior: "auto" });
+            tiltAccumulated -= pixels;
+          }
+        } else {
+          tiltAccumulated = 0;
         }
         lastTime = now;
       }
@@ -258,8 +288,8 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
     setIsTiltEnabled,
     textSize,
     setTextSize,
-    language,
-    setLanguage,
+    selectedLanguages,
+    toggleLanguage,
     theme,
     setTheme,
     isUIVisible,
