@@ -6,10 +6,17 @@ import { ControlBar } from "@/components/ControlBar";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { TextContent } from "@/components/TextContent";
 import { practiceText } from "@/data/sample-text";
+import { useTiltScroll } from "@/app/hooks/useTiltScroll";
 import { Minimize } from "lucide-react";
 
 function ReaderApp() {
-  const { isUIVisible, setIsUIVisible, scrollContainerRef } = useReader();
+  const { isUIVisible, setIsUIVisible, scrollContainerRef, scrollSpeed } =
+    useReader();
+
+  const { isTiltScrolling, toggleTiltScroll } = useTiltScroll({
+    scrollSpeed,
+    scrollContainerRef,
+  });
 
   return (
     <div className="h-screen flex flex-col overflow-hidden">
@@ -31,7 +38,10 @@ function ReaderApp() {
       </div>
 
       {/* Control bar (bottom) */}
-      <ControlBar />
+      <ControlBar
+        isTiltScrolling={isTiltScrolling}
+        toggleTiltScroll={toggleTiltScroll}
+      />
 
       {/* Restore button when UI is hidden */}
       {!isUIVisible && (
@@ -40,7 +50,10 @@ function ReaderApp() {
           className="restore-button"
           aria-label="Show controls"
         >
-          <Minimize className="h-5 w-5" style={{ color: "var(--foreground)" }} />
+          <Minimize
+            className="h-5 w-5"
+            style={{ color: "var(--foreground)" }}
+          />
         </button>
       )}
     </div>

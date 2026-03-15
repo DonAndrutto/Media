@@ -36,7 +36,7 @@ export function useReader() {
 
 export function ReaderProvider({ children }: { children: React.ReactNode }) {
   const [isScrolling, setIsScrolling] = useState(false);
-  const [scrollSpeed, setScrollSpeed] = useState(1.1);
+  const [scrollSpeed, setScrollSpeed] = useState(2.0);
   const [textSize, setTextSize] = useState(1.25);
   const [selectedLanguages, setSelectedLanguages] = useState<Language[]>([
     "tibetan",

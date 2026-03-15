@@ -14,10 +14,16 @@ import {
   Sun,
   Moon,
   BookOpen,
+  Move3d,
 } from "lucide-react";
 import { Theme } from "@/types";
 
-export function ControlBar() {
+interface ControlBarProps {
+  isTiltScrolling: boolean;
+  toggleTiltScroll: () => void;
+}
+
+export function ControlBar({ isTiltScrolling, toggleTiltScroll }: ControlBarProps) {
   const {
     isScrolling,
     setIsScrolling,
@@ -112,7 +118,7 @@ export function ControlBar() {
             </span>
           </div>
 
-          {/* Center: Fullscreen + Theme */}
+          {/* Center: Fullscreen + Tilt + Theme */}
           <div className="flex items-center gap-1">
             <Button
               variant="ghost"
@@ -121,6 +127,16 @@ export function ControlBar() {
               aria-label="Toggle fullscreen"
             >
               <Maximize className="h-4 w-4" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTiltScroll}
+              className={isTiltScrolling ? "active-button" : ""}
+              aria-label="Toggle tilt scroll"
+            >
+              <Move3d className="h-4 w-4" />
             </Button>
 
             <Button
